@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateSettingRequest;
 use App\Models\PortfolioSetting;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class SettingController extends Controller
 {
@@ -54,7 +53,7 @@ class SettingController extends Controller
             ];
         });
 
-        return Inertia::render('Admin/Settings/Index', [
+        return view('admin.settings.index', [
             'settings' => $settings,
         ]);
     }

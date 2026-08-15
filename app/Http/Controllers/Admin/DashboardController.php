@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\AcademicRecord;
 use App\Models\ContactSubmission;
 use App\Models\MusicalRecord;
-use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -35,7 +34,7 @@ class DashboardController extends Controller
             ],
         ];
 
-        return Inertia::render('Admin/Dashboard', [
+        return view('admin.dashboard', [
             'stats' => $stats,
         ]);
     }

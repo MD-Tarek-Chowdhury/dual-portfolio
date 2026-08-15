@@ -7,14 +7,12 @@ use App\Http\Requests\Public\ContactFormRequest;
 use App\Jobs\SendContactEmail;
 use App\Models\ContactSubmission;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
-use Inertia\Inertia;
 
 class ContactController extends Controller
 {
     public function store(ContactFormRequest $request)
     {
-        $key = 'contact-form:' . $request->ip();
+        $key = 'contact-form:' . $request->ip() . ':' . md5($request->email);
 
         $executed = RateLimiter::attempt(
             $key,

@@ -9,11 +9,13 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TrashController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\PortfolioController;
+use App\Http\Controllers\Public\SeoController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes
+| Public Routes (Anyone can visit these)
 |--------------------------------------------------------------------------
 */
 
@@ -30,36 +32,28 @@ Route::get('/music/{section?}', [PortfolioController::class, 'music'])
 Route::get('/contact', [PortfolioController::class, 'contact'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-/*
-|--------------------------------------------------------------------------
-| SEO Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/sitemap.xml', [App\Http\Controllers\Public\SeoController::class, 'sitemap'])
-    ->name('sitemap');
-Route::get('/robots.txt', [App\Http\Controllers\Public\SeoController::class, 'robots'])
-    ->name('robots');
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes (Protected)
+| Admin Routes (Must be logged in)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
 
-    // Dashboard
+    // Dashboard with stats
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Academic Records CRUD
+    // Academic Records
     Route::resource('academic-records', AcademicRecordController::class)->except(['show']);
     Route::post('/academic-records/{academic_record}/restore', [AcademicRecordController::class, 'restore'])
         ->name('academic-records.restore');
     Route::delete('/academic-records/{academic_record}/force-delete', [AcademicRecordController::class, 'forceDelete'])
         ->name('academic-records.force-delete');
 
-    // Music Records CRUD
+    // Music Records
     Route::resource('music-records', MusicalRecordController::class)->except(['show']);
     Route::post('/music-records/{musical_record}/restore', [MusicalRecordController::class, 'restore'])
         ->name('music-records.restore');
@@ -77,11 +71,26 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Trash Bin
     Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
 
-    // Contact Submissions
+    // Contact Messages
     Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
     Route::get('/contact-submissions/{submission}', [ContactSubmissionController::class, 'show'])->name('contact-submissions.show');
     Route::delete('/contact-submissions/{submission}', [ContactSubmissionController::class, 'destroy'])->name('contact-submissions.destroy');
 });
 
-// Auth Routes (Breeze handles these)
+/*
+|--------------------------------------------------------------------------
+| Breeze Auth (Login, Register, etc.)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 require __DIR__.'/auth.php';

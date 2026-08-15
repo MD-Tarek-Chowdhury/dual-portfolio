@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicRecord;
 use App\Models\MusicalRecord;
-use Inertia\Inertia;
 
 class TrashController extends Controller
 {
@@ -19,7 +18,7 @@ class TrashController extends Controller
             ->orderBy('deleted_at', 'desc')
             ->get();
 
-        return Inertia::render('Admin/Trash/Index', [
+        return view('admin.trash.index', [
             'academicRecords' => $academicTrashed,
             'musicRecords' => $musicTrashed,
         ]);

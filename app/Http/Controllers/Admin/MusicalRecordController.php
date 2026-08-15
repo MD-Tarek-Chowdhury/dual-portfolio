@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMusicalRecordRequest;
 use App\Models\MusicalRecord;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class MusicalRecordController extends Controller
 {
@@ -24,7 +23,7 @@ class MusicalRecordController extends Controller
             ->orderBy('display_order', 'asc')
             ->orderBy('created_at', 'desc');
 
-        return Inertia::render('Admin/MusicRecords/Index', [
+        return view('admin.music-records.index', [
             'records' => $query->paginate(15)->withQueryString(),
             'filters' => $request->only(['search', 'type', 'status']),
             'types' => ['band_info', 'discography', 'instrument', 'course'],
@@ -33,7 +32,7 @@ class MusicalRecordController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/MusicRecords/Form', [
+        return view('admin.music-records.form', [
             'types' => ['band_info', 'discography', 'instrument', 'course'],
             'record' => null,
         ]);
@@ -49,7 +48,7 @@ class MusicalRecordController extends Controller
 
     public function edit(MusicalRecord $musicalRecord)
     {
-        return Inertia::render('Admin/MusicRecords/Form', [
+        return view('admin.music-records.form', [
             'types' => ['band_info', 'discography', 'instrument', 'course'],
             'record' => $musicalRecord,
         ]);

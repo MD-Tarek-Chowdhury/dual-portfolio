@@ -7,13 +7,12 @@ use App\Models\AcademicRecord;
 use App\Models\MusicalRecord;
 use App\Models\PortfolioSetting;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class PortfolioController extends Controller
 {
     public function landing()
     {
-        return Inertia::render('Public/Landing', [
+        return view('public.landing', [
             'settings' => $this->getPublicSettings(),
             'heroImage' => PortfolioSetting::get('hero_parent_image', asset('images/default/parent.jpg')),
         ]);
@@ -22,14 +21,15 @@ class PortfolioController extends Controller
     public function academic(Request $request, ?string $section = null)
     {
         $records = [];
+        $isPaginated = false;
 
         if ($section) {
             $records = AcademicRecord::forPublic()
                 ->byType($section)
                 ->paginate(12)
                 ->withQueryString();
+            $isPaginated = true;
         } else {
-            // Load featured/summary records for each section
             $types = ['publication', 'course', 'designation', 'achievement'];
             foreach ($types as $type) {
                 $records[$type] = AcademicRecord::forPublic()
@@ -39,9 +39,10 @@ class PortfolioController extends Controller
             }
         }
 
-        return Inertia::render('Public/AcademicPortfolio', [
+        return view('public.academic', [
             'section' => $section,
             'records' => $records,
+            'isPaginated' => $isPaginated,
             'settings' => $this->getPublicSettings(),
             'heroImage' => PortfolioSetting::get('hero_academic_image', asset('images/default/academic.jpg')),
             'defaultMood' => PortfolioSetting::get('academic_mood_default', 'day'),
@@ -52,12 +53,14 @@ class PortfolioController extends Controller
     public function music(Request $request, ?string $section = null)
     {
         $records = [];
+        $isPaginated = false;
 
         if ($section) {
             $records = MusicalRecord::forPublic()
                 ->byType($section)
                 ->paginate(12)
                 ->withQueryString();
+            $isPaginated = true;
         } else {
             $types = ['band_info', 'discography', 'instrument', 'course'];
             foreach ($types as $type) {
@@ -68,9 +71,10 @@ class PortfolioController extends Controller
             }
         }
 
-        return Inertia::render('Public/MusicPortfolio', [
+        return view('public.music', [
             'section' => $section,
             'records' => $records,
+            'isPaginated' => $isPaginated,
             'settings' => $this->getPublicSettings(),
             'heroImage' => PortfolioSetting::get('hero_music_image', asset('images/default/music.jpg')),
             'defaultMood' => PortfolioSetting::get('music_mood_default', 'studio'),
@@ -80,7 +84,7 @@ class PortfolioController extends Controller
 
     public function contact()
     {
-        return Inertia::render('Public/Contact', [
+        return view('public.contact', [
             'settings' => $this->getPublicSettings(),
             'academicContact' => [
                 'email' => PortfolioSetting::get('contact_email_academic', 'professor@university.edu'),

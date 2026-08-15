@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAcademicRecordRequest;
 use App\Models\AcademicRecord;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class AcademicRecordController extends Controller
 {
@@ -25,7 +24,7 @@ class AcademicRecordController extends Controller
             ->orderBy('display_order', 'asc')
             ->orderBy('created_at', 'desc');
 
-        return Inertia::render('Admin/AcademicRecords/Index', [
+        return view('admin.academic-records.index', [
             'records' => $query->paginate(15)->withQueryString(),
             'filters' => $request->only(['search', 'type', 'status']),
             'types' => ['publication', 'course', 'designation', 'achievement'],
@@ -34,7 +33,7 @@ class AcademicRecordController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/AcademicRecords/Form', [
+        return view('admin.academic-records.form', [
             'types' => ['publication', 'course', 'designation', 'achievement'],
             'record' => null,
         ]);
@@ -50,7 +49,7 @@ class AcademicRecordController extends Controller
 
     public function edit(AcademicRecord $academicRecord)
     {
-        return Inertia::render('Admin/AcademicRecords/Form', [
+        return view('admin.academic-records.form', [
             'types' => ['publication', 'course', 'designation', 'achievement'],
             'record' => $academicRecord,
         ]);

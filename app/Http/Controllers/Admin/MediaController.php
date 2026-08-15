@@ -7,14 +7,13 @@ use App\Http\Requests\Admin\UploadHeroImageRequest;
 use App\Models\PortfolioSetting;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Inertia\Inertia;
 use Intervention\Image\Laravel\Facades\Image;
 
 class MediaController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Admin/Media/Index', [
+        return view('admin.media.index', [
             'heroImages' => [
                 'parent' => PortfolioSetting::get('hero_parent_image'),
                 'academic' => PortfolioSetting::get('hero_academic_image'),

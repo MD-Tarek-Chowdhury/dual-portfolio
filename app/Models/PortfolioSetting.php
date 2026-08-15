@@ -22,7 +22,7 @@ class PortfolioSetting extends Model
 
     public static function get(string $key, $default = null)
     {
-        return Cache::remember("portfolio_setting_{$key}", 3600, function () use ($key, $default) {
+        return Cache::remember("dual_portfolio:setting:{$key}", 3600, function () use ($key, $default) {
             $setting = self::where('setting_key', $key)->first();
             return $setting ? self::castValue($setting) : $default;
         });
@@ -37,7 +37,8 @@ class PortfolioSetting extends Model
                 'setting_type' => $type,
             ]
         );
-        Cache::forget("portfolio_setting_{$key}");
+        Cache::forget("dual_portfolio:setting:{$key}");
+        Cache::forget('dual_portfolio:settings:all');
     }
 
     public static function getAll(): array
@@ -66,13 +67,13 @@ class PortfolioSetting extends Model
         parent::boot();
 
         static::saved(function ($model) {
-            Cache::forget("portfolio_setting_{$model->setting_key}");
-            Cache::forget('portfolio_settings_all');
+            Cache::forget("dual_portfolio:setting:{$model->setting_key}");
+            Cache::forget('dual_portfolio:settings:all');
         });
 
         static::deleted(function ($model) {
-            Cache::forget("portfolio_setting_{$model->setting_key}");
-            Cache::forget('portfolio_settings_all');
+            Cache::forget("dual_portfolio:setting:{$model->setting_key}");
+            Cache::forget('dual_portfolio:settings:all');
         });
     }
 }

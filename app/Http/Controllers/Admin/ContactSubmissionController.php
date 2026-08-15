@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ContactSubmission;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class ContactSubmissionController extends Controller
 {
@@ -24,7 +23,7 @@ class ContactSubmissionController extends Controller
             })
             ->orderBy('created_at', 'desc');
 
-        return Inertia::render('Admin/ContactSubmissions/Index', [
+        return view('admin.contact-submissions.index', [
             'submissions' => $query->paginate(20)->withQueryString(),
             'filters' => $request->only(['type', 'search']),
         ]);
@@ -36,7 +35,7 @@ class ContactSubmissionController extends Controller
             $submission->update(['read_at' => now()]);
         }
 
-        return Inertia::render('Admin/ContactSubmissions/Show', [
+        return view('admin.contact-submissions.show', [
             'submission' => $submission,
         ]);
     }
