@@ -23,9 +23,17 @@ class PortfolioController extends Controller
         $records = [];
         $isPaginated = false;
 
+        // Map URL sections to database record types
+        $sectionToType = [
+            'bio' => 'designation',
+            'research' => 'publication',
+            'teaching' => 'course',
+        ];
+
         if ($section) {
+            $recordType = $sectionToType[$section] ?? $section;
             $records = AcademicRecord::forPublic()
-                ->byType($section)
+                ->byType($recordType)
                 ->paginate(12)
                 ->withQueryString();
             $isPaginated = true;
@@ -55,9 +63,17 @@ class PortfolioController extends Controller
         $records = [];
         $isPaginated = false;
 
+        // Map URL sections to database record types
+        $sectionToType = [
+           'band' => 'band_info',
+           'courses' => 'course',
+           'booking' => 'band_info', // Map booking to band_info to prevent SQL errors
+       ];
+
         if ($section) {
+            $recordType = $sectionToType[$section] ?? $section;
             $records = MusicalRecord::forPublic()
-                ->byType($section)
+                ->byType($recordType)
                 ->paginate(12)
                 ->withQueryString();
             $isPaginated = true;
@@ -108,5 +124,21 @@ class PortfolioController extends Controller
             'siteTitleMusic' => PortfolioSetting::get('site_title_music', 'Band Name – Music'),
             'footerCopyright' => PortfolioSetting::get('footer_copyright', '© ' . date('Y') . ' – All Rights Reserved'),
         ];
+    }
+
+    public function showAcademic(AcademicRecord $academicRecord)
+    {
+        return view('public.academic-show', [
+            'record' => $academicRecord,
+            'settings' => $this->getPublicSettings(),
+        ]);
+    }
+
+    public function showMusic(MusicalRecord $musicalRecord)
+    {
+        return view('public.music-show', [
+            'record' => $musicalRecord,
+            'settings' => $this->getPublicSettings(),
+        ]);
     }
 }

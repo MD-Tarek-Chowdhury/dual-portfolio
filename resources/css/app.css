@@ -1,3 +1,270 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* resources/css/app.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* ===== Custom CSS Variables for Mood System ===== */
+:root {
+    --academic-primary: #6495ED;
+    --academic-dim: #4A7AC0;
+    --academic-dark: #3B6099;
+    --academic-bg: #ffffff;
+    --academic-bg-alt: #f8fafc;
+    --academic-text: #1e293b;
+
+    --music-primary: #722F37;
+    --music-neon: #00F0FF;
+    --music-magenta: #FF00AA;
+    --music-sulfur: #CCFF00;
+    --music-bg: #fafaf9;
+    --music-bg-alt: #f5f5f4;
+    --music-text: #1e293b;
+}
+
+/* ===== Base Component Classes (Default State) ===== */
+.academic-text-primary {
+    color: var(--academic-primary);
+}
+
+.music-text-primary {
+    color: var(--music-primary);
+}
+
+.academic-card {
+    background-color: var(--academic-bg);
+    border-color: #e2e8f0;
+}
+
+.music-card {
+    background-color: var(--music-bg-alt);
+    border-color: #e7e5e4;
+}
+
+.music-nav-active {
+    border-bottom: 2px solid var(--music-primary);
+    color: var(--music-primary);
+}
+
+.music-btn-primary {
+    background-color: var(--music-primary);
+    color: white;
+    border: 1px solid transparent;
+}
+
+.music-btn-primary:hover {
+    background-color: #5a252c;
+}
+
+.academic-hero {
+    background-color: var(--academic-primary);
+}
+
+.music-hero {
+    background-color: var(--music-primary);
+}
+
+/* ===== Academic Mood: Dimmer ===== */
+[data-mood="dim"] {
+    --academic-primary: #4A7AC0;
+    --academic-bg: #F0F4F8;
+    --academic-bg-alt: #E2E8F0;
+    --academic-text: #334155;
+}
+
+[data-mood="dim"] .academic-hero {
+    background-color: var(--academic-dim);
+}
+
+[data-mood="dim"] .academic-card {
+    background-color: #E8EDF3;
+    border-color: #CBD5E1;
+}
+
+[data-mood="dim"] .academic-text-primary {
+    color: var(--academic-dark);
+}
+
+/* ===== Music Mood: Neon Arena ===== */
+[data-mood="neon"] {
+    --music-primary: #722F37;
+    --music-bg: #0A0A0A;
+    --music-bg-alt: #111111;
+    --music-text: #e5e5e5;
+}
+
+[data-mood="neon"] .music-hero {
+    background: linear-gradient(135deg, #0A0A0A 0%, #1a0a0a 50%, #0A0A0A 100%);
+}
+
+[data-mood="neon"] .music-card {
+    background-color: #111111;
+    border-color: #222222;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+}
+
+[data-mood="neon"] .music-card:hover {
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+}
+
+[data-mood="neon"] .music-text-primary {
+    color: var(--music-neon);
+}
+
+[data-mood="neon"] .music-text-secondary {
+    color: var(--music-magenta);
+}
+
+[data-mood="neon"] .music-border {
+    border-color: var(--music-neon);
+}
+
+[data-mood="neon"] .music-glow-cyan {
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+[data-mood="neon"] .music-glow-magenta {
+    box-shadow: 0 0 15px rgba(255, 0, 170, 0.4);
+}
+
+[data-mood="neon"] .music-nav-active {
+    border-bottom: 2px solid var(--music-neon);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+[data-mood="neon"] .music-btn-primary {
+    background-color: var(--music-primary);
+    border: 1px solid var(--music-neon);
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+[data-mood="neon"] .music-btn-primary:hover {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+}
+
+[data-mood="neon"] input,
+[data-mood="neon"] textarea,
+[data-mood="neon"] select {
+    background-color: #1a1a1a;
+    border-color: #333333;
+    color: #e5e5e5;
+}
+
+[data-mood="neon"] input:focus,
+[data-mood="neon"] textarea:focus,
+[data-mood="neon"] select:focus {
+    border-color: var(--music-neon);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+/* ===== Smooth Transitions ===== */
+.mood-transition {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* ===== Mood Toggle Switch ===== */
+.mood-toggle-track {
+    position: relative;
+    width: 56px;
+    height: 28px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mood-toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.mood-toggle-track.active .mood-toggle-thumb {
+    transform: translateX(28px);
+}
+
+/* Academic toggle styling */
+.mood-toggle-academic .mood-toggle-track {
+    background-color: #CBD5E1;
+}
+
+.mood-toggle-academic .mood-toggle-track.active {
+    background-color: var(--academic-dim);
+}
+
+.mood-toggle-academic .mood-toggle-thumb {
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Music toggle styling - stage light / amp knob */
+.mood-toggle-music .mood-toggle-track {
+    background-color: #333;
+    border: 1px solid #555;
+}
+
+.mood-toggle-music .mood-toggle-track.active {
+    background-color: #1a1a1a;
+    border-color: var(--music-neon);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.mood-toggle-music .mood-toggle-thumb {
+    background: radial-gradient(circle, #444 0%, #222 100%);
+    border: 1px solid #555;
+}
+
+.mood-toggle-music .mood-toggle-track.active .mood-toggle-thumb {
+    background: radial-gradient(circle, var(--music-neon) 0%, #00a0a0 100%);
+    border-color: var(--music-neon);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+/* ===== Admin Sidebar ===== */
+.admin-sidebar {
+    background-color: #1e293b;
+}
+
+.admin-sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #94a3b8;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.admin-sidebar-link:hover,
+.admin-sidebar-link.active {
+    background-color: #334155;
+    color: white;
+}
+
+/* ===== Utility ===== */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ===== Scrollbar styling for neon mode ===== */
+[data-mood="neon"] ::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-mood="neon"] ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+}
+
+[data-mood="neon"] ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+[data-mood="neon"] ::-webkit-scrollbar-thumb:hover {
+    background: var(--music-neon);
+}

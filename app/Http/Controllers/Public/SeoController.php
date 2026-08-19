@@ -21,18 +21,6 @@ class SeoController extends Controller
 
     public function robots()
     {
-        $content = "User-agent: *\n";
-
-        if (app()->environment('local', 'testing')) {
-            $content .= "Disallow: /\n";
-        } else {
-            $content .= "Disallow: /admin\n";
-            $content .= "Disallow: /login\n";
-            $content .= "Disallow: /register\n";
-            $content .= "Allow: /\n";
-            $content .= "Sitemap: " . route('sitemap') . "\n";
-        }
-
-        return response($content)->header('Content-Type', 'text/plain');
+        return response()->view('seo.robots')->header('Content-Type', 'text/plain');
     }
 }

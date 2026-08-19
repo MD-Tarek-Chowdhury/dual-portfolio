@@ -29,6 +29,9 @@ Route::get('/music/{section?}', [PortfolioController::class, 'music'])
     ->where('section', 'band|discography|courses|booking')
     ->name('music');
 
+Route::get('/academic/record/{academicRecord:slug}', [PortfolioController::class, 'showAcademic'])->name('academic.record.show');
+Route::get('/music/record/{musicalRecord:slug}', [PortfolioController::class, 'showMusic'])->name('music.record.show');
+
 Route::get('/contact', [PortfolioController::class, 'contact'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 

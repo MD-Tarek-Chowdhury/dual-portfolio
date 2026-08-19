@@ -57,7 +57,9 @@ class PortfolioSetting extends Model
     {
         return match($setting->setting_type) {
             'boolean' => filter_var($setting->setting_value, FILTER_VALIDATE_BOOLEAN),
-            'image_path' => asset('storage/' . $setting->setting_value),
+            'image_path' => str_starts_with($setting->setting_value, '/images/')
+                ? asset($setting->setting_value)
+                : asset('storage/' . $setting->setting_value),
             default => $setting->setting_value,
         };
     }
